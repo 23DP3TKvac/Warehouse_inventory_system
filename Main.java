@@ -114,7 +114,7 @@ public class Main {
     private static void loadingAnimation() throws InterruptedException {
         for (int i = 0; i < 3; i++) {
             System.out.print(".");
-            Thread.sleep(300);
+            Thread.sleep(1000);
         }
         System.out.println();
     }
