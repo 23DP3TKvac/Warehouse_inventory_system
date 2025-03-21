@@ -54,7 +54,7 @@ public class Warehouse {
         return total;
     }
 
-    public int getReamainingSpace() {
+    public int getRemainingSpace() {
         return capacity - currentLoad;
     }
 
