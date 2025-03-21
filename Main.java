@@ -42,7 +42,7 @@ public class Main {
 
                     Product newProduct = new Product(name, category, supplier, price, quantity); // Fixed constructor arguments
 
-                    System.out.print("Adding...");
+                    System.out.print("Adding");
                     try {
                         loadingAnimation(); // Added exception handling
                     } catch (InterruptedException e) {
@@ -72,7 +72,7 @@ public class Main {
                     break;
 
                 case 4:
-                    System.out.println("Calculating...");
+                    System.out.println("Calculating");
                     try {
                         loadingAnimation(); // Added exception handling
                     } catch (InterruptedException e) {
@@ -87,7 +87,7 @@ public class Main {
                     break;
 
                 case 6:
-                    System.out.println("Exporting...");
+                    System.out.println("Exporting");
                     try {
                         loadingAnimation(); // Added exception handling
                     } catch (InterruptedException e) {
@@ -120,21 +120,20 @@ public class Main {
     }
 
     private static void welcomeAnimation() throws InterruptedException {
-        System.out.println("Welcome to Warehouse system!"); // Fixed typo
-        System.out.println("Loading...");
+        System.out.println("Welcome to Warehouse system!");
+        System.out.println("Loading");
         loadingAnimation();
-        System.out.println("Already here!");
         System.out.println("===========================\n");
     }
 
     private static void exitAnimation() throws InterruptedException {
-        System.out.println("\nShutting down...");
+        System.out.println("\nShutting down");
         for (int i = 0; i < 3; i++) {
             System.out.print(".");
-            Thread.sleep(500);
+            Thread.sleep(1000);
         }
         System.out.println("\nThank you for choosing us!");
-        System.out.println("Exiting...");
+        System.out.println("Bye!");
         Thread.sleep(1000);
     }
 }
