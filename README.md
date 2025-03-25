@@ -13,6 +13,6 @@ Mūsu projekta galvenā funkcija ir noliktavas uzraudzība - preču pievienošan
 2. Ievadiet nosaukumu, kategoriju, piegādātāju, cenu, daudzumu.
 3. Mēs redzam “Pievieno produktu…” ar ielādes animāciju.
 4. Ja produkts ir pievienots - “Produkts pievienots veiksmīgi”, pretējā gadījumā “Nepietiek vietas”.
-5. 5. Eksportējot un filtrējot, ir arī animācija pirms izpildes.
+5. Eksportējot un filtrējot, ir arī animācija pirms izpildes.
 
  

@@ -25,26 +25,94 @@ public class Warehouse {
     public void printProducts() {
         if (products.isEmpty()) {
             System.out.println("Warehouse is empty...");
-        } else {
-            for (Product p : products) {
-                System.out.println(p);
-            }
+            return;
         }
+    
+        int nameWidth = 15, categoryWidth = 15, supplierWidth = 15, priceWidth = 10, quantityWidth = 10;
+        
+        for (Product product : products) {
+            nameWidth = Math.max(nameWidth, product.getName().length() + 2);
+            categoryWidth = Math.max(categoryWidth, product.getCategory().length() + 2);
+            supplierWidth = Math.max(supplierWidth, product.getSupplier().length() + 2);
+        }
+
+        // Формат строки
+        String format = "| %-"+nameWidth+"s | %-"+categoryWidth+"s | %-"+supplierWidth+"s | %"+priceWidth+".2f | %"+quantityWidth+"d |\n";
+
+        // Верхняя граница таблицы
+        printTableBorder(nameWidth, categoryWidth, supplierWidth, priceWidth, quantityWidth);
+
+        // Заголовки
+        System.out.printf("| %-"+nameWidth+"s | %-"+categoryWidth+"s | %-"+supplierWidth+"s | %"+priceWidth+"s | %"+quantityWidth+"s |\n",
+                "Name", "Category", "Supplier", "Price $", "Quantity");
+
+        // Разделительная линия
+        printTableBorder(nameWidth, categoryWidth, supplierWidth, priceWidth, quantityWidth);
+
+        // Данные товаров
+        for (Product product : products) {
+            System.out.printf(format, 
+                    product.getName(), product.getCategory(), product.getSupplier(),
+                    product.getPrice(), product.getQuantity());
+        }
+    
+        // Нижняя граница таблицы
+        printTableBorder(nameWidth, categoryWidth, supplierWidth, priceWidth, quantityWidth);
+    }
+
+    // Метод для печати границ таблицы
+    private void printTableBorder(int nameW, int catW, int supW, int priceW, int qtyW) {
+        System.out.println("+" + "-".repeat(nameW + 2) + "+" + "-".repeat(catW + 2) + "+"
+                + "-".repeat(supW + 2) + "+" + "-".repeat(priceW + 2) + "+" + "-".repeat(qtyW + 2) + "+");
     }
 
     public void filterByCategory(String category) {
-        boolean found = false;
-        for (Product p : products) {
-            if (p.category.equalsIgnoreCase(category)) {
-                System.out.println(p);
-                found = true;
+        ArrayList<Product> filteredProducts = new ArrayList<>();
+    
+        for (Product product : products) {
+            if (product.getCategory().equalsIgnoreCase(category)) {
+                filteredProducts.add(product);
             }
         }
-        if (!found) {
-            System.out.println("Error! Products not found ;(");
-        }
-    } 
     
+        if (filteredProducts.isEmpty()) {
+            System.out.println(" Category '" + category + "' is empty...");
+            return;
+        }
+    
+        // Определяем ширину колонок
+        int nameWidth = 15, categoryWidth = 15, supplierWidth = 15, priceWidth = 10, quantityWidth = 10;
+    
+        for (Product product : filteredProducts) {
+            nameWidth = Math.max(nameWidth, product.getName().length() + 2);
+            categoryWidth = Math.max(categoryWidth, product.getCategory().length() + 2);
+            supplierWidth = Math.max(supplierWidth, product.getSupplier().length() + 2);
+        }
+    
+        // Формат строки
+        String format = "| %-"+nameWidth+"s | %-"+categoryWidth+"s | %-"+supplierWidth+"s | %"+priceWidth+".2f | %"+quantityWidth+"d |\n";
+    
+        // Верхняя граница таблицы
+        printTableBorder(nameWidth, categoryWidth, supplierWidth, priceWidth, quantityWidth);
+    
+        // Заголовки
+        System.out.printf("| %-"+nameWidth+"s | %-"+categoryWidth+"s | %-"+supplierWidth+"s | %"+priceWidth+"s | %"+quantityWidth+"s |\n",
+                "Name", "Category", "Supplier", "Price $", "Quantity");
+    
+        // Разделительная линия
+        printTableBorder(nameWidth, categoryWidth, supplierWidth, priceWidth, quantityWidth);
+    
+        // Данные товаров
+        for (Product product : filteredProducts) {
+            System.out.printf(format, 
+                    product.getName(), product.getCategory(), product.getSupplier(),
+                    product.getPrice(), product.getQuantity());
+        }
+    
+        // Нижняя граница таблицы
+        printTableBorder(nameWidth, categoryWidth, supplierWidth, priceWidth, quantityWidth);
+    }
+
     public double calculateTotalValue() {
         double total = 0;
 
@@ -68,5 +136,15 @@ public class Warehouse {
         } catch (IOException e) {
             System.out.println("File saving error! ;(");
         }
+    }
+
+    public boolean removeProduct(String name) {
+        for (Product product : products) {
+            if (product.getName().equalsIgnoreCase(name)) {
+                products.remove(product);
+                return true;
+            }
+        }
+        return false;
     }
 }

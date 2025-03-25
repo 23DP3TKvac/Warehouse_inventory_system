@@ -2,23 +2,27 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws Exception {
+
+        System.out.print("\033[32m");
         Scanner scanner = new Scanner(System.in); // Fixed variable name
         Warehouse warehouse = new Warehouse(100);
         // TODO
         // https://java-programming.mooc.fi/part-11/3-exceptions
         
+
         welcomeAnimation();
 
         while (true) {
-            System.out.println("\n=== Warehouse management menu===");
+            System.out.println("\n=== Warehouse management menu ===");
             System.out.println("1. Add product");
             System.out.println("2. Show all products");
             System.out.println("3. Category Filter");
             System.out.println("4. Count all product cost");
             System.out.println("5. Show capacity/empty space");
             System.out.println("6. Export data to CSV");
+            System.out.println("7. Remove product");
             System.out.println("0. Execute the program");
-            System.out.print("Choose the action (0-6): ");
+            System.out.print("Choose the action (0-7): ");
 
             int choice = scanner.nextInt(); // Fixed variable name
             scanner.nextLine(); // Fixed variable name
@@ -56,6 +60,7 @@ public class Main {
                     break;
 
                 case 2:
+                    loadingAnimation();
                     System.out.println("\nProduct list:");
                     warehouse.printProducts();
                     break;
@@ -82,6 +87,7 @@ public class Main {
                     break;
 
                 case 5:
+                    loadingAnimation();
                     System.out.println("Warehouse capacity: " + warehouse.capacity + "pc.");
                     System.out.println("Space left: " + warehouse.getRemainingSpace() + "pc."); // Fixed method name
                     break;
@@ -94,6 +100,21 @@ public class Main {
                         System.out.println("Error during loading animation.");
                     }
                     warehouse.exportToCSV("inventory.csv");
+                    break;
+
+                case 7:
+                    loadingAnimation();
+                    System.out.println("Current products in warehouse:");
+                    warehouse.printProducts();
+                    System.out.println("Enter the name of the product you want to remove:");
+                    String productName = scanner.nextLine();
+                    System.out.println("Removing");
+                    loadingAnimation();
+                    if (warehouse.removeProduct(productName)) {
+                        System.out.println("Product is removed successfully!!!");
+                    } else {
+                        System.out.println("Error! Product not found ;(");
+                    }
                     break;
 
                 case 0:
@@ -112,9 +133,10 @@ public class Main {
     }
 
     private static void loadingAnimation() throws InterruptedException {
-        for (int i = 0; i < 3; i++) {
-            System.out.print(".");
-            Thread.sleep(1000);
+        String redSquare = "\033[0;31m■\033[32m";
+        for (int i = 0; i < 5; i++) {
+            System.out.print(redSquare);
+            Thread.sleep(500);
         }
         System.out.println();
     }
@@ -128,12 +150,11 @@ public class Main {
 
     private static void exitAnimation() throws InterruptedException {
         System.out.println("\nShutting down");
-        for (int i = 0; i < 3; i++) {
-            System.out.print(".");
-            Thread.sleep(1000);
+        String redSquare = "\033[0;31m■\033[32m";
+        for (int i = 0; i < 5; i++) {
+            System.out.print(redSquare);
+            Thread.sleep(500);
         }
-        System.out.println("\nThank you for choosing us!");
         System.out.println("Bye!");
-        Thread.sleep(1000);
     }
 }
