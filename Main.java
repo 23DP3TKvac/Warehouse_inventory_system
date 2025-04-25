@@ -57,12 +57,18 @@ public class Main {
                     } else {
                         System.out.println("Error! Not enough space in warehouse ;(");
                     }
+                    System.out.println("\nPress Enter to continue...");
+                    scanner.nextLine();
+                    clearConsole();
                     break;
 
                 case 2:
                     loadingAnimation();
                     System.out.println("\nProduct list:");
                     warehouse.printProducts();
+                    System.out.println("\nPress Enter to continue...");
+                    scanner.nextLine();
+                    clearConsole();
                     break;
 
                 case 3:
@@ -74,6 +80,9 @@ public class Main {
                         System.out.println("Error during loading animation.");
                     }
                     warehouse.filterByCategory(filterCategory);
+                    System.out.println("\nPress Enter to continue...");
+                    scanner.nextLine();
+                    clearConsole();
                     break;
 
                 case 4:
@@ -81,15 +90,21 @@ public class Main {
                     try {
                         loadingAnimation(); // Added exception handling
                     } catch (InterruptedException e) {
-                        System.out.println("Error during loading animation.");
+                        System.out.println("Error during loading animation!");
                     }
                     System.out.println("Total value: $" + warehouse.calculateTotalValue());
+                    System.out.println("Press Enter to continue...");
+                    scanner.nextLine();
+                    clearConsole();
                     break;
 
                 case 5:
                     loadingAnimation();
                     System.out.println("Warehouse capacity: " + warehouse.capacity + "pc.");
                     System.out.println("Space left: " + warehouse.getRemainingSpace() + "pc."); // Fixed method name
+                    System.out.println("\nPress Enter to continue...");
+                    scanner.nextLine();
+                    clearConsole();
                     break;
 
                 case 6:
@@ -97,9 +112,13 @@ public class Main {
                     try {
                         loadingAnimation(); // Added exception handling
                     } catch (InterruptedException e) {
-                        System.out.println("Error during loading animation.");
+                        System.out.println("Error during loading animation!");
                     }
                     warehouse.exportToCSV("inventory.csv");
+                    System.out.println("Data are saved in inventory.csv :)");
+                    System.out.println("Press Enter to continue...");
+                    scanner.nextLine();
+                    clearConsole();
                     break;
 
                 case 7:
@@ -111,23 +130,29 @@ public class Main {
                     System.out.println("Removing");
                     loadingAnimation();
                     if (warehouse.removeProduct(productName)) {
-                        System.out.println("Product is removed successfully!!!");
+                        System.out.println("Product is removed successfully!");
                     } else {
                         System.out.println("Error! Product not found ;(");
                     }
+                    System.out.println("\nPress Enter to continue...");
+                    scanner.nextLine();
+                    clearConsole();
                     break;
 
                 case 0:
                     try {
                         exitAnimation(); // Added exception handling
                     } catch (InterruptedException e) {
-                        System.out.println("Error during exit animation.");
+                        System.out.println("Error during exit animation!");
                     }
                     scanner.close(); // Fixed variable name
                     return;
 
                 default:
                     System.out.println("Error: wrong choice. Try again!");
+                    System.out.println("Press Enter to continue...");
+                    scanner.nextLine();
+                    clearConsole();
             }
         }
     }
@@ -156,5 +181,18 @@ public class Main {
             Thread.sleep(500);
         }
         System.out.println("Bye!");
+    }
+
+    private static void clearConsole() {
+        try {
+            if (System.getProperty("os.name").contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                new ProcessBuilder("\033[H\033[2j");
+                System.out.flush();
+            }
+        } catch (Exception e) {
+            System.out.println("Error clearing console: " + e.getMessage());
+        }
     }
 }
