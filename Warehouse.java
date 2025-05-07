@@ -6,7 +6,6 @@ public class Warehouse {
     List<Product> products = new ArrayList<>();
     int capacity;
     int currentLoad = 0;
-
     public Warehouse(int capacity) {
         this.capacity = capacity;
     }
