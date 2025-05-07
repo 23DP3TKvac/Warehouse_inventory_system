@@ -1,14 +1,12 @@
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws Exception {
+
+    public static void main(String[] args) throws InterruptedException {
 
         System.out.print("\033[32m");
-        Scanner scanner = new Scanner(System.in); // Fixed variable name
+        Scanner scanner = new Scanner(System.in);
         Warehouse warehouse = new Warehouse(100);
-        // TODO
-        // https://java-programming.mooc.fi/part-11/3-exceptions
-        
 
         welcomeAnimation();
 
@@ -17,46 +15,45 @@ public class Main {
             System.out.println("1. Add product");
             System.out.println("2. Show all products");
             System.out.println("3. Category Filter");
-            System.out.println("4. Count all product cost");
-            System.out.println("5. Show capacity/empty space");
-            System.out.println("6. Export data to CSV");
-            System.out.println("7. Remove product");
-            System.out.println("0. Execute the program");
-            System.out.print("Choose the action (0-7): ");
+            System.out.println("4. Sort products");
+            System.out.println("5. Count all product cost");
+            System.out.println("6. Show capacity/empty space");
+            System.out.println("7. Export data to CSV");
+            System.out.println("8. Remove product");
+            System.out.println("0. Exit");
+            System.out.print("Choose the action (0-8): ");
 
-            int choice = scanner.nextInt(); // Fixed variable name
-            scanner.nextLine(); // Fixed variable name
-            
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
             switch (choice) {
                 case 1:
                     System.out.print("Enter product name: ");
-                    String name = scanner.nextLine(); // Fixed variable name
+                    String name = scanner.nextLine();
+                    System.out.print("Enter product category: ");
+                    String category = scanner.nextLine();
+                    System.out.print("Enter product supplier: ");
+                    String supplier = scanner.nextLine();
+                    System.out.print("Enter product price: ");
+                    double price = scanner.nextDouble();
+                    System.out.print("Enter product quantity: ");
+                    int quantity = scanner.nextInt();
+                    scanner.nextLine();
 
-                    System.out.print("Enter product category: "); // Fixed prompt
-                    String category = scanner.nextLine(); // Fixed variable name
-                    
-                    System.out.print("Enter product supplier: "); // Fixed prompt
-                    String supplier = scanner.nextLine(); // Fixed variable name
+                    Product newProduct = new Product(name, category, supplier, price, quantity);
 
-                    System.out.print("Enter product price: "); // Fixed prompt
-                    double price = Double.parseDouble(scanner.nextLine()); // Convert to double
-
-                    System.out.print("Enter product quantity: "); // Fixed prompt
-                    int quantity = Integer.parseInt(scanner.nextLine()); // Convert to int
-
-                    Product newProduct = new Product(name, category, supplier, price, quantity); // Fixed constructor arguments
-
-                    System.out.print("Adding");
                     try {
-                        loadingAnimation(); // Added exception handling
+                        loadingAnimation();
                     } catch (InterruptedException e) {
                         System.out.println("Error during loading animation.");
                     }
+
                     if (warehouse.addProduct(newProduct)) {
-                        System.out.println("Product is added successfully!!! ;)");
+                        System.out.println("Product added successfully!");
                     } else {
-                        System.out.println("Error! Not enough space in warehouse ;(");
+                        System.out.println("Error: Not enough space in warehouse.");
                     }
+
                     System.out.println("\nPress Enter to continue...");
                     scanner.nextLine();
                     clearConsole();
@@ -73,9 +70,9 @@ public class Main {
 
                 case 3:
                     System.out.print("Enter category: ");
-                    String filterCategory = scanner.nextLine(); // Fixed variable name
+                    String filterCategory = scanner.nextLine();
                     try {
-                        loadingAnimation(); // Added exception handling
+                        loadingAnimation();
                     } catch (InterruptedException e) {
                         System.out.println("Error during loading animation.");
                     }
@@ -85,54 +82,95 @@ public class Main {
                     clearConsole();
                     break;
 
-                case 4:
-                    System.out.println("Calculating");
-                    try {
-                        loadingAnimation(); // Added exception handling
-                    } catch (InterruptedException e) {
-                        System.out.println("Error during loading animation!");
-                    }
-                    System.out.println("Total value: $" + warehouse.calculateTotalValue());
-                    System.out.println("Press Enter to continue...");
+                    case 4:
+                    System.out.println("Choose a sorting option:");
+                    System.out.println("1. Sort by Name");
+                    System.out.println("2. Sort by Price (low to high)");
+                    System.out.println("3. Sort by Price (high to low)");
+                    System.out.println("4. Sort by Quantity");
+                    System.out.println("5. Sort by Supplier");
+                    System.out.print("Your choice: ");
+                    int sortChoice = scanner.nextInt();
                     scanner.nextLine();
-                    clearConsole();
-                    break;
-
-                case 5:
-                    loadingAnimation();
-                    System.out.println("Warehouse capacity: " + warehouse.capacity + "pc.");
-                    System.out.println("Space left: " + warehouse.getRemainingSpace() + "pc."); // Fixed method name
+                
+                    switch (sortChoice) {
+                        case 1:
+                            Collections.sort(warehouse.products, Product.NameComparator);
+                            System.out.println("Products sorted by Name:");
+                            break;
+                        case 2:
+                            Collections.sort(warehouse.products, Product.PriceComparator);
+                            System.out.println("Products sorted by Price (low to high):");
+                            break;
+                        case 3:
+                            Collections.sort(warehouse.products, Product.PriceDescendingComparator);
+                            System.out.println("Products sorted by Price (high to low):");
+                            break;
+                        case 4:
+                            Collections.sort(warehouse.products, Product.QuantityComparator);
+                            System.out.println("Products sorted by Quantity:");
+                            break;
+                        case 5:
+                            Collections.sort(warehouse.products, Product.SupplierComparator);
+                            System.out.println("Products sorted by Supplier:");
+                            break;
+                        default:
+                            System.out.println("Invalid choice!");
+                            return;
+                    }
+                    warehouse.printProducts();
                     System.out.println("\nPress Enter to continue...");
                     scanner.nextLine();
                     clearConsole();
                     break;
 
-                case 6:
-                    System.out.println("Exporting");
+                case 5:
                     try {
-                        loadingAnimation(); // Added exception handling
+                        loadingAnimation();
                     } catch (InterruptedException e) {
                         System.out.println("Error during loading animation!");
                     }
-                    warehouse.exportToCSV("inventory.csv");
-                    System.out.println("Data are saved in inventory.csv :)");
+                    System.out.println("Total warehouse value: $" + warehouse.calculateTotalValue());
                     System.out.println("Press Enter to continue...");
                     scanner.nextLine();
                     clearConsole();
                     break;
 
+                case 6:
+                    loadingAnimation();
+                    System.out.println("Warehouse capacity: " + warehouse.capacity);
+                    System.out.println("Remaining space: " + warehouse.getRemainingSpace());
+                    System.out.println("\nPress Enter to continue...");
+                    scanner.nextLine();
+                    clearConsole();
+                    break;
+
                 case 7:
+                    System.out.print("Enter filename for CSV export: ");
+                    String filename = scanner.nextLine();
+                    warehouse.exportToCSV(filename);
+                    try {
+                        loadingAnimation();
+                    } catch (InterruptedException e) {
+                        System.out.println("Error during loading animation!");
+                    }
+                    System.out.println("Data saved to inventory.csv");
+                    System.out.println("Press Enter to continue...");
+                    scanner.nextLine();
+                    clearConsole();
+                    break;
+
+                case 8:
                     loadingAnimation();
                     System.out.println("Current products in warehouse:");
                     warehouse.printProducts();
-                    System.out.println("Enter the name of the product you want to remove:");
+                    System.out.print("Enter product name to remove: ");
                     String productName = scanner.nextLine();
-                    System.out.println("Removing");
                     loadingAnimation();
                     if (warehouse.removeProduct(productName)) {
-                        System.out.println("Product is removed successfully!");
+                        System.out.println("Product removed successfully!");
                     } else {
-                        System.out.println("Error! Product not found ;(");
+                        System.out.println("Product not found!");
                     }
                     System.out.println("\nPress Enter to continue...");
                     scanner.nextLine();
@@ -141,15 +179,15 @@ public class Main {
 
                 case 0:
                     try {
-                        exitAnimation(); // Added exception handling
+                        farewellAnimation();
                     } catch (InterruptedException e) {
                         System.out.println("Error during exit animation!");
                     }
-                    scanner.close(); // Fixed variable name
+                    scanner.close();
                     return;
 
                 default:
-                    System.out.println("Error: wrong choice. Try again!");
+                    System.out.println("Invalid choice. Try again.");
                     System.out.println("Press Enter to continue...");
                     scanner.nextLine();
                     clearConsole();
@@ -167,32 +205,44 @@ public class Main {
     }
 
     private static void welcomeAnimation() throws InterruptedException {
-        System.out.println("Welcome to Warehouse system!");
+        clearConsole();
+    
+        System.out.println(" __        __   _                            _          ");
+        System.out.println(" \\ \\      / /__| | ___ ___  _ __ ___   ___  | |_ ___    ");
+        System.out.println("  \\ \\ /\\ / / _ \\ |/ __/ _ \\| '_ ` _ \\ / _ \\ | __/ _ \\ ");
+        System.out.println("   \\ V  V /  __/ | (_| (_) | | | | | |  __/ | || (_) |   ");
+        System.out.println("    \\_/\\_/ \\___|_|\\___\\___/|_| |_| |_|\\___|  \\__\\___/ ");
+        System.out.println();
+    
+        System.out.println("Warehouse Inventory System!");
         System.out.println("Loading");
         loadingAnimation();
         System.out.println("===========================\n");
     }
 
-    private static void exitAnimation() throws InterruptedException {
-        System.out.println("\nShutting down");
-        String redSquare = "\033[0;31m■\033[32m";
-        for (int i = 0; i < 5; i++) {
-            System.out.print(redSquare);
+    private static void farewellAnimation() throws InterruptedException {
+        clearConsole();
+
+        System.out.println(" ____             ");
+        System.out.println("| __ ) _   _  ____ ");
+        System.out.println("|   \\| | | |/ __ \\");
+        System.out.println("| |_) | |_| |  ___/");
+        System.out.println("|____/\\__, |\\___|");
+        System.out.println("       |___/      ");
+
+        
+        System.out.print("Exiting");
+        for (int i = 0; i < 3; i++) {
+            System.out.print(".");
             Thread.sleep(500);
         }
-        System.out.println("Bye!");
+        System.out.println();
+        clearConsole();
     }
 
     private static void clearConsole() {
-        try {
-            if (System.getProperty("os.name").contains("Windows")) {
-                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-            } else {
-                new ProcessBuilder("\033[H\033[2j");
-                System.out.flush();
-            }
-        } catch (Exception e) {
-            System.out.println("Error clearing console: " + e.getMessage());
+        for (int i = 0; i < 50; i++) {
+            System.out.println();
         }
     }
 }
